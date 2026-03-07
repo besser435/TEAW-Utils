@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "me.besser.teawutils.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ContraptionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

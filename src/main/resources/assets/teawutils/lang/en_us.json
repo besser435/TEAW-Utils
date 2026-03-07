@@ -1,0 +1,8 @@
+{
+  "itemGroup.teawutils": "TEAW Utils Tab",
+
+  "teawutils.configuration.title": "TEAW Utils Configs",
+  "teawutils.configuration.section.teawutils.common.toml": "TEAW Utils Configs",
+  "teawutils.configuration.section.teawutils.common.toml.title": "TEAW Utils Configs",
+  "teawutils.configuration.items": "Item List"
+}
