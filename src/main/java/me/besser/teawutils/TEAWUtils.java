@@ -2,6 +2,8 @@ package me.besser.teawutils;
 
 import com.mojang.logging.LogUtils;
 import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
+import me.besser.teawutils.registry.ModCreativeTabs;
+import me.besser.teawutils.registry.ModItems;
 import me.besser.teawutils.util.TUConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,8 +24,12 @@ public class TEAWUtils {
     public TEAWUtils(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, TUConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
-
         NeoForge.EVENT_BUS.register(this);
+
+
+        ModItems.register(modEventBus);
+        ModCreativeTabs.register(modEventBus);
+
 
         LOGGER.info("TEAW Utils started!");
     }

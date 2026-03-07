@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "DGD",
+    " D "
+  ],
+  "key": {
+    "D": { "item": "minecraft:diamond_block" },
+    "G": { "tag": "c:glass_blocks" }
+  },
+  "result": {
+    "id": "teawutils:nether_star_frame",
+    "count": 1
+  }
+}
