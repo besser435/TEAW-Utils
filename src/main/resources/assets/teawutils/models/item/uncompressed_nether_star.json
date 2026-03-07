@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "teawutils:item/uncompressed_nether_star"
+  }
+}
