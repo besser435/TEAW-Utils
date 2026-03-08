@@ -12,24 +12,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// TODO: This only affects Minecart Contraptions
-// TODO: There should be a note in the config that specifies what kinds of contraptions are affected.
-// TODO: We want to limit all drills, but only limit the CBC stuff to cart contraptions. They can be allowed on trains.
-// TODO: I think trains are a special kind of contraption, so we can just disable them on all contraptions and trains should be unaffected.
 @Mixin(value = MountedContraption.class, remap = false)
-public class ContraptionMixin {
-    @Inject(
-            method = "assemble",
-            at = @At("RETURN")
-    )
+public class MountedContraptionMixin {
+    @Inject(method = "assemble", at = @At("RETURN"))
     private void onAssemble(Level level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) throws AssemblyException {
-        TEAWUtils.LOGGER.debug("onAssemble mixin\n\n\n");
+
+        TEAWUtils.LOGGER.info("Assemble mounted contraption");
 
         if (cir.getReturnValue()) {
-            TEAWUtils.LOGGER.debug("running contraption validation\n\n\n");
 
-            Contraption contraption = (Contraption) (Object) this;  // Casts MountedContraption to general Contraption
-            ContraptionLimiter.validate(contraption, pos);
+            TEAWUtils.LOGGER.info("Validating mounted contraption...");
+
+            // We tell the limiter this is a CART
+            ContraptionLimiter.validate((Contraption)(Object)this, pos, ContraptionLimiter.TYPE_CART);
         }
     }
 }

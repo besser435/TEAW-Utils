@@ -39,7 +39,6 @@ public class TEAWUtils {
         event.enqueueWork(ContraptionLimiter::init);
     }
 
-
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {}
 }
