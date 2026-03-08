@@ -19,7 +19,6 @@ public class ContraptionLimiter {
     private static final Set<ResourceLocation> BANNED_BLOCKS = new HashSet<>();
     private static final Map<ResourceLocation, Integer> BLOCK_LIMITS = new HashMap<>();
 
-
     public static void init() {
         // For hot reloading (the values are final, maybe fix that)
         BANNED_NAMESPACES.clear();

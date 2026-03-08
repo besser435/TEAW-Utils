@@ -1,16 +1,28 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
   "pattern": [
-    " D ",
-    "DGD",
-    " D "
+    " SSS ",
+    "SDGDS",
+    "SGDGS",
+    "SDGDS",
+    " SSS "
   ],
   "key": {
-    "D": { "item": "minecraft:diamond_block" },
-    "G": { "tag": "c:glass_blocks" }
+    "S": {
+      "item": "create:sturdy_sheet"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    },
+    "G": {
+      "item": "minecraft:tinted_glass"
+    }
   },
   "result": {
-    "id": "teawutils:nether_star_frame",
-    "count": 1
-  }
+    "count": 1,
+    "id": "teawutils:nether_star_frame"
+  },
+  "show_notification": false
 }
