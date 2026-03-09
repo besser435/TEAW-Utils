@@ -2,87 +2,154 @@ package me.besser.teawutils.contraptionTweaks;
 
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.Contraption;
+import me.besser.teawutils.TEAWUtils;
+import me.besser.teawutils.util.TUConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ContraptionLimiter {
-    private static final Map<String, Set<ResourceLocation>> BANNED_BLOCKS = new HashMap<>();
-    private static final Map<String, Set<String>> BANNED_MODS = new HashMap<>();
-    private static final Map<String, Map<ResourceLocation, Integer>> BLOCK_LIMITS = new HashMap<>();
+    private static final Map<Category, Set<ResourceLocation>> BANNED_BLOCKS = new HashMap<>();
+    private static final Map<Category, Set<String>> BANNED_MODS = new HashMap<>();
+    private static final Map<Category, Map<ResourceLocation, Integer>> BLOCK_LIMITS = new HashMap<>();
 
-    public static final String TYPE_ANY = "any";
-    public static final String TYPE_CART = "cart";
-    public static final String TYPE_TRAIN = "train";
+    // Kind of goofy we set config defaults here, but whatever.
+    public enum Category {
+        ALL("All contraption types",
+                List.of(), List.of(), List.of("create:mechanical_drill=320")),
 
-    public static void init() {
-        //  TODO us config values
-        // Universal limit: Drills are limited everywhere
-        addLimit(TYPE_ANY, "create:mechanical_drill", 12);
+        CART("Minecart Contraptions",
+                List.of("createbigcannons"), List.of(), List.of()),
 
-        // Specific limit: Ban CBC on Carts, but not necessarily on Trains
-        addBannedMod(TYPE_CART, "createbigcannons");
+        TRAIN("Train Contraptions",
+                List.of(), List.of(), List.of()),
 
-        // Example: Only 4 chests on Trains, but unlimited on others
-        addLimit(TYPE_TRAIN, "minecraft:chest", 4);
+        LINEAR("Gantry Carriage and Mechanical Piston Contraptions",
+                List.of(), List.of(), List.of()),
 
+        PULLEY("Rope Pulley and Elevator Contraptions",
+                List.of(), List.of(), List.of()),
+
+        ROTATIONAL("Mechanical, Windmill, and Clockwork Bearing Contraptions",
+                List.of(), List.of(), List.of());
+
+        private final String description;
+        private final List<String> defaultMods;
+        private final List<String> defaultBlocks;
+        private final List<String> defaultLimits;
+
+        Category(String description,
+                 List<String> defaultMods, List<String> defaultBlocks, List<String> defaultLimits) {
+            this.description = description;
+            this.defaultMods = defaultMods;
+            this.defaultBlocks = defaultBlocks;
+            this.defaultLimits = defaultLimits;
+        }
+
+        // Getters
+        public String getDescription() { return description; }
+        public List<String> getDefaultMods() { return defaultMods; }
+        public List<String> getDefaultBlocks() { return defaultBlocks; }
+        public List<String> getDefaultLimits() { return defaultLimits; }
     }
 
-    public static void validate(Contraption contraption, BlockPos anchorPos, String currentType) throws AssemblyException {
+    public static void reloadConfig() {
+        BANNED_BLOCKS.clear();
+        BANNED_MODS.clear();
+        BLOCK_LIMITS.clear();
+
+        for (Category category : Category.values()) {
+            TUConfig.Common.CategoryConfig catConfig = TUConfig.COMMON.categories.get(category);
+            if (catConfig == null) continue;
+
+            catConfig.bannedMods.get().forEach(modId -> addBannedMod(category, modId));
+
+            catConfig.bannedBlocks.get().forEach(blockId -> {
+                if (ResourceLocation.tryParse(blockId) != null) {
+                    addBannedBlock(category, blockId);
+                }
+            });
+
+            catConfig.blockLimits.get().forEach(entry -> {
+                String[] parts = entry.split("=");
+                if (parts.length == 2) {
+                    String id = parts[0].trim();
+                    if (ResourceLocation.tryParse(id) != null) {
+                        try {
+                            int limit = Integer.parseInt(parts[1].trim());
+                            addLimit(category, id, limit);
+                        } catch (NumberFormatException ignored) {}
+                    }
+                }
+            });
+        }
+
+        TEAWUtils.LOGGER.info("Loaded configuration");
+    }
+
+    public static void validate(Contraption contraption, BlockPos anchorPos, Category category) throws AssemblyException {
         Map<ResourceLocation, Integer> currentCounts = new HashMap<>();
 
+        // Probably slow, but the max contraption size is only 2048 blocks.
         for (StructureBlockInfo info : contraption.getBlocks().values()) {
             Block block = info.state().getBlock();
             ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
 
-            // 1. Check Bans
-            if (isBanned(id, TYPE_ANY) || isBanned(id, currentType)) {
+            // Check Bans
+            if (isBanned(id, Category.ALL) || isBanned(id, category)) {
                 throw AssemblyException.unmovableBlock(anchorPos.offset(info.pos()), info.state());
             }
 
-            // 2. Increment the count ONCE per block
+            // Increment count for block limits
             int count = currentCounts.getOrDefault(id, 0) + 1;
             currentCounts.put(id, count);
 
-            // 3. Check Limits for "any" and the specific type using the updated count
-            checkLimit(id, info, count, TYPE_ANY);
-            checkLimit(id, info, count, currentType);
+            // Check limits
+            checkLimit(id, info, count, Category.ALL);
+            checkLimit(id, info, count, category);
         }
     }
 
-    private static void checkLimit(ResourceLocation id, StructureBlockInfo info, int currentCount, String type) throws AssemblyException {
-        Map<ResourceLocation, Integer> typeLimits = BLOCK_LIMITS.get(type);
+    private static void checkLimit(ResourceLocation id, StructureBlockInfo info, int currentCount, Category category)
+            throws AssemblyException {
+
+        Map<ResourceLocation, Integer> typeLimits = BLOCK_LIMITS.get(category);
 
         if (typeLimits != null && typeLimits.containsKey(id)) {
             int limit = typeLimits.get(id);
 
             if (currentCount > limit) {
-                throw new AssemblyException(info.state().getBlock().getName().copy()
-                        .append(" limit exceeded.")
+                String categoryName = category.name().toLowerCase();
+
+                throw new AssemblyException(
+                        info.state().getBlock().getName().copy()
+                        // categoryName is import for UX, as some things are allowed on other kinds of contraptions.
+                        .append(" limit exceeded for " + categoryName + " contraptions.")
                         .append(" The limit is: " + limit));
             }
         }
     }
 
-    private static boolean isBanned(ResourceLocation id, String type) {
-        if (BANNED_BLOCKS.getOrDefault(type, Set.of()).contains(id)) return true;
-        if (BANNED_MODS.getOrDefault(type, Set.of()).contains(id.getNamespace())) return true;
+    private static boolean isBanned(ResourceLocation id, Category category) {
+        if (BANNED_BLOCKS.getOrDefault(category, Set.of()).contains(id)) return true;
+        if (BANNED_MODS.getOrDefault(category, Set.of()).contains(id.getNamespace())) return true;
 
         return false;
     }
 
-    public static void addBannedMod(String type, String modId) {
-        BANNED_MODS.computeIfAbsent(type, k -> new HashSet<>()).add(modId);
+    public static void addBannedMod(Category category, String modId) {
+        BANNED_MODS.computeIfAbsent(category, k -> new HashSet<>()).add(modId);
     }
 
-    public static void addLimit(String type, String id, int limit) {
-        BLOCK_LIMITS.computeIfAbsent(type, k -> new HashMap<>()).put(ResourceLocation.parse(id), limit);
+    public static void addBannedBlock(Category category, String id) {
+        BANNED_BLOCKS.computeIfAbsent(category, k -> new HashSet<>()).add(ResourceLocation.parse(id));
+    }
+
+    public static void addLimit(Category category, String id, int limit) {
+        BLOCK_LIMITS.computeIfAbsent(category, k -> new HashMap<>()).put(ResourceLocation.parse(id), limit);
     }
 }

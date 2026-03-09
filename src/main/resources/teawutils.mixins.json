@@ -3,9 +3,7 @@
   "package": "me.besser.teawutils.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MountedContraptionMixin",
-    "PistonContraptionMixin",
-    "TrainContraptionMixin"
+    "UniversalContraptionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

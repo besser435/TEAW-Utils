@@ -10,6 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -20,7 +21,6 @@ public class TEAWUtils {
     public static final String MODID = "teawutils";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
     public TEAWUtils(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, TUConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
@@ -31,13 +31,23 @@ public class TEAWUtils {
         ModCreativeTabs.register(modEventBus);
 
 
+        modEventBus.addListener((ModConfigEvent.Loading event) -> {
+            if (event.getConfig().getSpec() == TUConfig.SPEC) {
+                ContraptionLimiter.reloadConfig();
+            }
+        });
+
+        modEventBus.addListener((ModConfigEvent.Reloading event) -> {
+            if (event.getConfig().getSpec() == TUConfig.SPEC) {
+                ContraptionLimiter.reloadConfig();
+            }
+        });
+
+
         LOGGER.info("TEAW Utils started!");
     }
 
-    private void commonSetup(FMLCommonSetupEvent event) {
-        // enqueueWork, something about thread safety
-        event.enqueueWork(ContraptionLimiter::init);
-    }
+    private void commonSetup(FMLCommonSetupEvent event) {}
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {}
