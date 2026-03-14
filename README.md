@@ -14,11 +14,9 @@ This mod does the following:
 
 
 # TODO:
+* Create Big Cannons needs steel and bronze. Should we add these metals?
+
+
 * We have recipe for NS Frame in the mod, but no NS recipe. Should we put all recipes into the server side datapack, or put the
   NS recipe in the mod? If we need to change it later, we can just override it with a datapack on the server without
   updating the mod.
-
-
-* Fix recipe for the Nether Star Frame. Its messy and doesn't use tags for the glass. e
-Can we make it so we don't need to manually specify "item" like in 26.1? If we use datagen it won't matter though.
-Should probably just use datagen.
