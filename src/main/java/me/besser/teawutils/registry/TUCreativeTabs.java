@@ -9,7 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class ModCreativeTabs {
+public class TUCreativeTabs {
 
     public static final DeferredRegister<CreativeModeTab> TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TEAWUtils.MODID);
@@ -17,9 +17,9 @@ public class ModCreativeTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TEAW_TAB =
             TABS.register("teaw_tab", () -> CreativeModeTab.builder()
                     .title(Component.literal("TEAW Utils")) // TODO: use lang
-                    .icon(() -> new ItemStack(ModItems.NETHER_STAR_FRAME.get()))
+                    .icon(() -> new ItemStack(TUItems.NETHER_STAR_FRAME.get()))
                     .displayItems((parameters, output) -> {
-                        output.accept(ModItems.NETHER_STAR_FRAME.get());
+                        output.accept(TUItems.NETHER_STAR_FRAME.get());
                     })
                     .build());
 

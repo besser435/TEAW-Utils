@@ -1,9 +1,11 @@
 package me.besser.teawutils;
 
 import com.mojang.logging.LogUtils;
+//import me.besser.teawutils.block.ModBlockEntities;
+//import me.besser.teawutils.block.ModBlocks;
 import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
-import me.besser.teawutils.registry.ModCreativeTabs;
-import me.besser.teawutils.registry.ModItems;
+import me.besser.teawutils.registry.TUCreativeTabs;
+import me.besser.teawutils.registry.TUItems;
 import me.besser.teawutils.util.TUConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -27,16 +29,21 @@ public class TEAWUtils {
         NeoForge.EVENT_BUS.register(this);
 
 
-        ModItems.register(modEventBus);
-        ModCreativeTabs.register(modEventBus);
+        TUItems.register(modEventBus);
+        TUCreativeTabs.register(modEventBus);
+//        ModBlocks.BLOCKS.register(modEventBus);
+//        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+//        modEventBus.addListener(this::registerCapabilities);
 
 
+        // Initial load
         modEventBus.addListener((ModConfigEvent.Loading event) -> {
             if (event.getConfig().getSpec() == TUConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
             }
         });
 
+        // Reload
         modEventBus.addListener((ModConfigEvent.Reloading event) -> {
             if (event.getConfig().getSpec() == TUConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
@@ -46,6 +53,14 @@ public class TEAWUtils {
 
         LOGGER.info("TEAW Utils started!");
     }
+
+//    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+//        event.registerBlockEntity(
+//                Capabilities.ItemHandler.BLOCK,
+//                ModBlockEntities.WAR_MONITOR_BE.get(),
+//                (be, side) -> be // This works because your BE implements IItemHandler
+//        );
+//    }
 
     private void commonSetup(FMLCommonSetupEvent event) {}
 

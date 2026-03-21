@@ -39,7 +39,7 @@ displayURL="https://github.com/besser435/TEAW-Utils" #optional
 #logoFile="examplemod.png" #optional
 
 # A text field displayed in the mod UI
-#credits="" #optional
+credits="dairypig, DIET" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
 authors="besser"

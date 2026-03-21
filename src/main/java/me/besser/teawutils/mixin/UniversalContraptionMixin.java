@@ -42,7 +42,6 @@ public class UniversalContraptionMixin {
         // Only run if the assembly was successful
         if (!cir.getReturnValue()) return;
 
-        // Resolve the category based on the actual class of 'this'
         Category category = tEAW_Utils$resolveCategory();
 
         ContraptionLimiter.validate((Contraption) (Object) this, pos, category);

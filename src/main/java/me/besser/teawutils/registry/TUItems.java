@@ -7,7 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class ModItems {
+public class TUItems {
 
     public static final DeferredRegister.Items ITEMS =
             DeferredRegister.createItems(TEAWUtils.MODID);
