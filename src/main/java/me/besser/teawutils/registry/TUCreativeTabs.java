@@ -16,7 +16,7 @@ public class TUCreativeTabs {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TEAW_TAB =
             TABS.register("teaw_tab", () -> CreativeModeTab.builder()
-                    .title(Component.literal("TEAW Utils")) // TODO: use lang
+                    .title(Component.translatable("teawutils.mod.name"))
                     .icon(() -> new ItemStack(TUItems.NETHER_STAR_FRAME.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(TUItems.NETHER_STAR_FRAME.get());

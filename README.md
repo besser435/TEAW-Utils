@@ -14,7 +14,7 @@ This mod does the following:
 
 
 # TODO:
-* Include the TEAW Datapack in teh data folder, so people in singleplayer test worlds don't have to download and install the datapack manually!
+* Include the TEAW Datapack in the data folder, so people in singleplayer test worlds don't have to download and install the datapack manually!
 The server pack might get updated more often than people update the mod, so be sure to push minor revisions so people can update the mod to get the 
 latest datapack if they want.
 

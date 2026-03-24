@@ -1,8 +1,8 @@
 {
+  "teawutils.mod.name": "TEAW Utils",
   "teawutils.configuration.title": "TEAW Utils Configs",
   "teawutils.configuration.section.teawutils.common.toml": "TEAW Utils Configs",
   "teawutils.configuration.section.teawutils.common.toml.title": "TEAW Utils Configs",
-
 
 
   "item.teawutils.nether_star_frame": "Nether Star Frame",
