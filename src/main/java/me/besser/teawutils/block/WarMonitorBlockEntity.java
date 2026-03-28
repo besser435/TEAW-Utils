@@ -24,7 +24,10 @@
 //    private int points = 0;
 //    private final Map<Item, Integer> progress = new HashMap<>();
 //    private final Map<Item, Integer> goals = new HashMap<>();
-//
+
+// TODO: right now you only have to insert one kind of item to get war points. make it so you must insert both items
+// before you are given a war point.
+
 //    public WarMonitorBlockEntity(BlockPos pos, BlockState state) {
 //        super(ModBlockEntities.WAR_MONITOR_BE.get(), pos, state);
 //        addBlockGoal("minecraft:stone", 256);
