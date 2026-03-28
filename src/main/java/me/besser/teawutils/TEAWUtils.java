@@ -1,8 +1,8 @@
 package me.besser.teawutils;
 
 import com.mojang.logging.LogUtils;
-import me.besser.teawutils.block.ModBlockEntities;
-import me.besser.teawutils.block.ModBlocks;
+//import me.besser.teawutils.block.ModBlockEntities;
+//import me.besser.teawutils.block.ModBlocks;
 import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
 import me.besser.teawutils.registry.TUCreativeTabs;
 import me.besser.teawutils.registry.TUItems;
