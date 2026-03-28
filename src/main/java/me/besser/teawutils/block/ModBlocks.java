@@ -1,6 +1,6 @@
 //package me.besser.teawutils.block;
 //
-//import me.besser.teawutils.registry.ModItems;
+//import me.besser.teawutils.registry.TUItems;
 //import net.minecraft.world.item.BlockItem;
 //import net.minecraft.world.item.Item;
 //import net.minecraft.world.level.block.Block;
@@ -19,5 +19,5 @@
 //            ));
 //
 //    public static final DeferredHolder<Item, BlockItem> WAR_MONITOR_ITEM =
-//            ModItems.ITEMS.register("war_monitor", () -> new BlockItem(WAR_MONITOR.get(), new Item.Properties()));
+//            TUItems.ITEMS.register("war_monitor", () -> new BlockItem(WAR_MONITOR.get(), new Item.Properties()));
 //}
