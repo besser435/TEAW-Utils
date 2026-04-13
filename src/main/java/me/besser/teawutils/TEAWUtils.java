@@ -5,7 +5,7 @@ import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
 import me.besser.teawutils.registry.TUCreativeTabs;
 import me.besser.teawutils.registry.TUItems;
 import me.besser.teawutils.tweaks.MiscTweaks;
-import me.besser.teawutils.util.TUConfig;
+import me.besser.teawutils.util.TEAWUtilsConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -23,7 +23,7 @@ public class TEAWUtils {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public TEAWUtils(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.COMMON, TUConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, TEAWUtilsConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
 
@@ -37,7 +37,7 @@ public class TEAWUtils {
 
         // Initial Config Load
         modEventBus.addListener((ModConfigEvent.Loading event) -> {
-            if (event.getConfig().getSpec() == TUConfig.SPEC) {
+            if (event.getConfig().getSpec() == TEAWUtilsConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
                 MiscTweaks.reloadConfig();
             }
@@ -45,7 +45,7 @@ public class TEAWUtils {
 
         // Config Reload
         modEventBus.addListener((ModConfigEvent.Reloading event) -> {
-            if (event.getConfig().getSpec() == TUConfig.SPEC) {
+            if (event.getConfig().getSpec() == TEAWUtilsConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
                 MiscTweaks.reloadConfig();
             }

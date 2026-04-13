@@ -10,7 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
-import me.besser.teawutils.util.TUConfig;
+import me.besser.teawutils.util.TEAWUtilsConfig;
 
 @EventBusSubscriber
 public class MiscTweaks {
@@ -41,7 +41,7 @@ public class MiscTweaks {
     }
 
     public static void reloadConfig() {
-        cooldownTicks = TUConfig.COMMON.enderPearlCooldown.get() * 20;
-        disableInvisibility = TUConfig.COMMON.disableInvisibility.get();
+        cooldownTicks = TEAWUtilsConfig.COMMON.enderPearlCooldown.get() * 20;
+        disableInvisibility = TEAWUtilsConfig.COMMON.disableInvisibility.get();
     }
 }

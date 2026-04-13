@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TUConfig {
+public class TEAWUtilsConfig {
 
     public static final ModConfigSpec SPEC;
     public static final Common COMMON;

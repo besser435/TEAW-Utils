@@ -3,7 +3,7 @@ package me.besser.teawutils.contraptionTweaks;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.Contraption;
 import me.besser.teawutils.TEAWUtils;
-import me.besser.teawutils.util.TUConfig;
+import me.besser.teawutils.util.TEAWUtilsConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -63,7 +63,7 @@ public class ContraptionLimiter {
         BLOCK_LIMITS.clear();
 
         for (Category category : Category.values()) {
-            TUConfig.Common.CategoryConfig catConfig = TUConfig.COMMON.categories.get(category);
+            TEAWUtilsConfig.Common.CategoryConfig catConfig = TEAWUtilsConfig.COMMON.categories.get(category);
             if (catConfig == null) continue;
 
             catConfig.bannedMods.get().forEach(modId -> addBannedMod(category, modId));
