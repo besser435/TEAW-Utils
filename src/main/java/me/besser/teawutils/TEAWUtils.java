@@ -1,11 +1,10 @@
 package me.besser.teawutils;
 
 import com.mojang.logging.LogUtils;
-//import me.besser.teawutils.block.ModBlockEntities;
-//import me.besser.teawutils.block.ModBlocks;
 import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
 import me.besser.teawutils.registry.TUCreativeTabs;
 import me.besser.teawutils.registry.TUItems;
+import me.besser.teawutils.tweaks.MiscTweaks;
 import me.besser.teawutils.util.TUConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,8 +13,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
@@ -38,19 +35,25 @@ public class TEAWUtils {
 //        modEventBus.addListener(this::registerCapabilities);
 
 
-        // Initial load
+        // Initial Config Load
         modEventBus.addListener((ModConfigEvent.Loading event) -> {
             if (event.getConfig().getSpec() == TUConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
+                MiscTweaks.reloadConfig();
             }
         });
 
-        // Reload
+        // Config Reload
         modEventBus.addListener((ModConfigEvent.Reloading event) -> {
             if (event.getConfig().getSpec() == TUConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
+                MiscTweaks.reloadConfig();
             }
         });
+
+
+        // Gameplay tweaks listeners
+        NeoForge.EVENT_BUS.register(MiscTweaks.class);
 
 
         LOGGER.info("TEAW Utils started!");

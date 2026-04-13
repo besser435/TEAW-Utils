@@ -20,19 +20,38 @@ public class TUConfig {
     }
 
     public static class Common {
+        // Contraption limits
         public final Map<ContraptionLimiter.Category, CategoryConfig> categories = new HashMap<>();
 
+        // Utility Tweaks
+        public final ModConfigSpec.IntValue enderPearlCooldown;
+        public final ModConfigSpec.BooleanValue disableInvisibility;
+
+        // Build config
         public Common(ModConfigSpec.Builder builder) {
-            builder.push("contraption_limits");
+            builder.comment("Contraption limits").push("contraption_limits");
 
             for (ContraptionLimiter.Category cat : ContraptionLimiter.Category.values()) {
-                builder.comment(cat.getDescription())
-                        .push(cat.name().toLowerCase());
+                builder.comment(cat.getDescription()).push(cat.name().toLowerCase());
 
                 categories.put(cat, new CategoryConfig(builder, cat));
 
                 builder.pop();
             }
+
+            builder.pop();
+
+
+
+            builder.comment("General utility tweaks").push("tweaks");
+
+            enderPearlCooldown = builder
+                    .comment("Cooldown for Ender Pearls in seconds. Minecraft default is 1 second.")
+                    .defineInRange("enderPearlCooldownSeconds", 30, 0, 3600);
+
+            disableInvisibility = builder
+                    .comment("Whether to prevent players from receiving the Invisibility effect")
+                    .define("disableInvisibility", true);
 
             builder.pop();
         }

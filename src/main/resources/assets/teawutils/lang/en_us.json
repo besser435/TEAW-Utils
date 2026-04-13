@@ -6,5 +6,7 @@
 
 
   "item.teawutils.nether_star_frame": "Nether Star Frame",
-  "item.teawutils.uncompressed_nether_star": "Uncompressed Nether Star"
+  "item.teawutils.uncompressed_nether_star": "Uncompressed Nether Star",
+
+  "teawutils.notifications.invisibility_disabled": "Invisibility is disabled!"
 }
