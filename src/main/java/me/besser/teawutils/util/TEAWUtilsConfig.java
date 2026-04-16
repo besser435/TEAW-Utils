@@ -25,6 +25,7 @@ public class TEAWUtilsConfig {
 
         // Utility Tweaks
         public final ModConfigSpec.IntValue enderPearlCooldown;
+        public final ModConfigSpec.IntValue enchantedAppleCooldown;
         public final ModConfigSpec.BooleanValue disableInvisibility;
 
         // Build config
@@ -46,8 +47,13 @@ public class TEAWUtilsConfig {
             builder.comment("General utility tweaks").push("tweaks");
 
             enderPearlCooldown = builder
-                    .comment("Cooldown for Ender Pearls in seconds. Minecraft default is 1 second.")
+                    .comment("Cooldown for Ender Pearls in seconds. Minecraft's default is 1 second.")
                     .defineInRange("enderPearlCooldownSeconds", 30, 0, 3600);
+
+            enchantedAppleCooldown = builder
+                    .comment("Cooldown for Enchanted Golden Apples in seconds.")
+                    .comment("Players can still get this effect by being shot with a Potato Cannon loaded with an E-Apple.")
+                    .defineInRange("enchantedAppleCooldownSeconds", 300, 0, 3600);
 
             disableInvisibility = builder
                     .comment("Whether to prevent players from receiving the Invisibility effect")
