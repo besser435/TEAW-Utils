@@ -15,3 +15,5 @@ This mod does the following:
 
 # TODO:
 * Make invisibility potion ban work on any potion effect. Just take from a list.
+* Increase wandering trader frequency with a few mixins that target spawn delay, chance increment, and max spawn chance.
+  These should be in a config, and maybe only bump the spawn delay. 
