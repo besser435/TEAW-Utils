@@ -26,7 +26,7 @@ public class TEAWUtilsConfig {
         // Utility Tweaks
         public final ModConfigSpec.IntValue enderPearlCooldown;
         public final ModConfigSpec.IntValue enchantedAppleCooldown;
-        public final ModConfigSpec.BooleanValue disableInvisibility;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> disabledPotions;
 
         // Build config
         public Common(ModConfigSpec.Builder builder) {
@@ -55,9 +55,9 @@ public class TEAWUtilsConfig {
                     .comment("Players can still get this effect by being shot with a Potato Cannon loaded with an E-Apple.")
                     .defineInRange("enchantedAppleCooldownSeconds", 300, 0, 3600);
 
-            disableInvisibility = builder
-                    .comment("Whether to prevent players from receiving the Invisibility effect")
-                    .define("disableInvisibility", true);
+            disabledPotions = builder
+                    .comment("List of potion/mob effect IDs to prevent players from receiving. Format: 'namespace:effect_id'")
+                    .defineListAllowEmpty("disabledEffects", List.of("minecraft:invisibility"), obj -> obj instanceof String);
 
             builder.pop();
         }
@@ -69,16 +69,16 @@ public class TEAWUtilsConfig {
 
             public CategoryConfig(ModConfigSpec.Builder builder, ContraptionLimiter.Category category) {
                 bannedMods = builder
-                        .comment("Banned mods. Format: 'modid'")
+                        .comment("Banned mods. Format: 'namespace'")
                         // TODO: fix deprecated defineList method
                         .defineListAllowEmpty("bannedMods", category.getDefaultMods(), obj -> obj instanceof String);
 
                 bannedBlocks = builder
-                        .comment("Banned blocks. Format: 'modid:block'")
+                        .comment("Banned blocks. Format: 'namespace:block'")
                         .defineListAllowEmpty("bannedBlocks", category.getDefaultBlocks(), obj -> obj instanceof String);
 
                 blockLimits = builder
-                        .comment("Limited blocks. Format: 'modid:block=limit'")
+                        .comment("Limited blocks. Format: 'namespace:block=limit'")
                         .defineListAllowEmpty("blockLimits", category.getDefaultLimits(), obj -> obj instanceof String);
             }
         }
