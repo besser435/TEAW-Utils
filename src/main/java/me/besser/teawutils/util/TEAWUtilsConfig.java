@@ -27,6 +27,7 @@ public class TEAWUtilsConfig {
         public final ModConfigSpec.IntValue enderPearlCooldown;
         public final ModConfigSpec.IntValue enchantedAppleCooldown;
         public final ModConfigSpec.ConfigValue<List<? extends String>> disabledPotions;
+        public final ModConfigSpec.BooleanValue requirePartyToClaim;
 
         // Build config
         public Common(ModConfigSpec.Builder builder) {
@@ -58,6 +59,10 @@ public class TEAWUtilsConfig {
             disabledPotions = builder
                     .comment("List of potion/mob effect IDs to prevent players from receiving. Format: 'namespace:effect_id'")
                     .defineListAllowEmpty("disabledEffects", List.of("minecraft:invisibility"), obj -> obj instanceof String);
+
+            requirePartyToClaim = builder
+                    .comment("Whether or not to require a party in order to be able to claim for Open Parties and Claims.")
+                    .define("requirePartyToClaim", true);
 
             builder.pop();
         }

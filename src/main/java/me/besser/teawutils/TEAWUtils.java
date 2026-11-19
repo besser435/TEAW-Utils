@@ -2,10 +2,14 @@ package me.besser.teawutils;
 
 import com.mojang.logging.LogUtils;
 import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
+import me.besser.teawutils.opac.PartyClaimListener;
 import me.besser.teawutils.registry.TUCreativeTabs;
 import me.besser.teawutils.registry.TUItems;
 import me.besser.teawutils.tweaks.MiscTweaks;
 import me.besser.teawutils.util.TEAWUtilsConfig;
+
+import me.besser.teawutils.opac.PartyClaimListener;
+
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -14,8 +18,10 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
+import xaero.pac.common.server.api.OpenPACServerAPI;
 
 @Mod(TEAWUtils.MODID)
 public class TEAWUtils {
@@ -26,6 +32,8 @@ public class TEAWUtils {
         modContainer.registerConfig(ModConfig.Type.COMMON, TEAWUtilsConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(this::onServerStarted);
+
 
 
         TUItems.register(modEventBus);
@@ -48,6 +56,7 @@ public class TEAWUtils {
             if (event.getConfig().getSpec() == TEAWUtilsConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
                 MiscTweaks.reloadConfig();
+                PartyClaimListener.reloadConfig();
             }
         });
 
@@ -70,5 +79,10 @@ public class TEAWUtils {
     private void commonSetup(FMLCommonSetupEvent event) {}
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {}
+    public void onServerStarted(ServerStartedEvent event) {
+        OpenPACServerAPI.get(event.getServer())
+                .getServerClaimsManager()
+                .getActionListenerManager()
+                .register(new PartyClaimListener());
+    }
 }
