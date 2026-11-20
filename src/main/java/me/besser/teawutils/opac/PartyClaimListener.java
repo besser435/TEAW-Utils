@@ -55,13 +55,13 @@ public class PartyClaimListener implements IClaimActionListenerAPI {
         // The player belongs to a party but is claiming individually
         if (partyManager.getPartyByMember(playerId) != null) {
             return deny(Component.translatable(
-                    "teawutils.opac.claim.no_party"
+                    "teawutils.opac.claim.party_mode_required"
             ));
         }
 
         // The player doesn't belong to a party
         return deny(Component.translatable(
-                "teawutils.opac.claim.party_mode_required"
+                "teawutils.opac.claim.no_party"
         ));
     }
 

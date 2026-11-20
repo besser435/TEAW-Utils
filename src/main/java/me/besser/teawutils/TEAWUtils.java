@@ -48,6 +48,7 @@ public class TEAWUtils {
             if (event.getConfig().getSpec() == TEAWUtilsConfig.SPEC) {
                 ContraptionLimiter.reloadConfig();
                 MiscTweaks.reloadConfig();
+                PartyClaimListener.reloadConfig();
             }
         });
 
