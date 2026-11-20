@@ -4,9 +4,11 @@
   "teawutils.configuration.section.teawutils.common.toml": "TEAW Utils Configs",
   "teawutils.configuration.section.teawutils.common.toml.title": "TEAW Utils Configs",
 
-
   "item.teawutils.nether_star_frame": "Nether Star Frame",
   "item.teawutils.uncompressed_nether_star": "Uncompressed Nether Star",
 
-  "teawutils.notifications.effect_disabled": "This effect is disabled!"
+  "teawutils.notifications.effect_disabled": "This effect is disabled!",
+
+  "teawutils.opac.claim.no_party": "You must join or create a party before claiming land!",
+  "teawutils.opac.claim.party_mode_required": "You are in a party! Switch your Claiming Mode to 'Claiming as Party' before claiming land."
 }

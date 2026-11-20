@@ -1,17 +1,14 @@
 package me.besser.teawutils.opac;
 
-
 import me.besser.teawutils.util.TEAWUtilsConfig;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+
 import xaero.pac.common.claims.action.api.ClaimingAction;
 import xaero.pac.common.claims.api.SpecialClaimOwners;
-import xaero.pac.common.claims.player.mode.api.ClaimingModes;
 import xaero.pac.common.server.api.OpenPACServerAPI;
 import xaero.pac.common.server.claims.action.listener.api.IClaimActionListenerAPI;
 import xaero.pac.common.server.claims.action.listener.override.api.ClaimActionPermissionOverride;
 import xaero.pac.common.server.claims.action.listener.override.api.ClaimActionPermissionOverrideType;
-import xaero.pac.common.server.player.data.api.ServerPlayerDataAPI;
 
 public class PartyClaimListener implements IClaimActionListenerAPI {
 
@@ -19,7 +16,7 @@ public class PartyClaimListener implements IClaimActionListenerAPI {
 
     @Override
     public String getName() {
-        return "TEAW Utils Party Claim Enforcement";
+        return "TEAW Utils Party Claim Listener";
     }
 
     @Override
@@ -37,58 +34,35 @@ public class PartyClaimListener implements IClaimActionListenerAPI {
             return currentOverride;
         }
 
-        // Only enforce this rule when claiming new land.
-        // Unclaiming and forceloading are unaffected.
+        // Only affect new claims
         if (action != ClaimingAction.CLAIM) {
             return currentOverride;
         }
 
+        // Allow server claims
         if (playerId.equals(SpecialClaimOwners.SERVER)) {
             return currentOverride;
         }
 
-        // Check whether the player belongs to a party.
-        boolean isInParty = OpenPACServerAPI.get(server)
-                .getPartyManager()
-                .getPartyByMember(playerId) != null;
+        var partyManager = OpenPACServerAPI.get(server).getPartyManager();
 
-        // TODO: put strings in lang file
-        if (!isInParty) {
-            return deny(
-                    "You must join a party before claiming land!"
-            );
+        // Claims being made as a party use the party owner's UUID.
+        // This works even when the party owner is offline.
+        if (partyManager.getPartyByOwner(playerId) != null) {
+            return currentOverride;
         }
 
-        // Get the player so we can check their claiming mode
-        // TODO: when the party owner is offline, the could not verify mode will show up.
-        // TODO: When the party owner is in the player claim mode (not party) the wrong mode error will show up.
-        ServerPlayer player = server.getPlayerList().getPlayer(playerId);
-
-        if (player == null) {
-            return deny(
-                    "Could not verify your claiming mode. Please try again."
-            );
+        // The player belongs to a party but is claiming individually
+        if (partyManager.getPartyByMember(playerId) != null) {
+            return deny(Component.translatable(
+                    "teawutils.opac.claim.no_party"
+            ));
         }
 
-        // Party members must claim as their party, never individually
-        if (!ServerPlayerDataAPI.from(player)
-                .getClaimingMode()
-                .equals(ClaimingModes.PARTY)) {
-
-            return deny(
-                    "You are in a party! Switch your Claiming Mode to "
-                            + "'Claiming as Party' before claiming land."
-            );
-        }
-
-        return currentOverride;
-    }
-
-    private ClaimActionPermissionOverride deny(String message) {
-        return new ClaimActionPermissionOverride(
-                ClaimActionPermissionOverrideType.INTERRUPT,
-                Component.literal(message)
-        );
+        // The player doesn't belong to a party
+        return deny(Component.translatable(
+                "teawutils.opac.claim.party_mode_required"
+        ));
     }
 
     @Override
@@ -100,12 +74,17 @@ public class PartyClaimListener implements IClaimActionListenerAPI {
             ClaimingAction action,
             xaero.pac.common.server.claims.api.IServerClaimsManagerAPI claimsManagerAPI,
             net.minecraft.server.MinecraftServer server
-    ) {
-        // Nothing needed
+    ) {}
+
+    private ClaimActionPermissionOverride deny(Component message) {
+        return new ClaimActionPermissionOverride(
+                ClaimActionPermissionOverrideType.INTERRUPT,
+                message
+        );
     }
 
-
     public static void reloadConfig() {
-        enableRequirePartyClaims = TEAWUtilsConfig.COMMON.requirePartyToClaim.get();
+        enableRequirePartyClaims =
+                TEAWUtilsConfig.COMMON.requirePartyToClaim.get();
     }
 }

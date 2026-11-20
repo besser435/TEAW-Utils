@@ -15,6 +15,8 @@ This mod does the following:
 * Lets you disable mob or potion effects
 * Configure a cooldown for ender pearls and enchanted golden apples
 
+* Ensures players must be in an OPAC party before being able to claim.
+
 ## TODO:
 * Increase wandering trader frequency with a few mixins that target spawn delay, chance increment, and max spawn chance.
   These should be in a config, and maybe only bump the spawn delay. 
