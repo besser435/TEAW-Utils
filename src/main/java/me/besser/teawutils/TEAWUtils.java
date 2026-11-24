@@ -7,9 +7,6 @@ import me.besser.teawutils.registry.TUCreativeTabs;
 import me.besser.teawutils.registry.TUItems;
 import me.besser.teawutils.tweaks.MiscTweaks;
 import me.besser.teawutils.util.TEAWUtilsConfig;
-
-import me.besser.teawutils.opac.PartyClaimListener;
-
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -19,7 +16,6 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 import xaero.pac.common.server.api.OpenPACServerAPI;
 
@@ -27,8 +23,11 @@ import xaero.pac.common.server.api.OpenPACServerAPI;
 public class TEAWUtils {
     public static final String MODID = "teawutils";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static String VERSION;
 
     public TEAWUtils(IEventBus modEventBus, ModContainer modContainer) {
+        VERSION = modContainer.getModInfo().getVersion().toString();
+
         modContainer.registerConfig(ModConfig.Type.COMMON, TEAWUtilsConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
@@ -66,7 +65,7 @@ public class TEAWUtils {
         NeoForge.EVENT_BUS.register(MiscTweaks.class);
 
 
-        LOGGER.info("TEAW Utils started!");
+        LOGGER.info("TEAW Utils v{} started!", VERSION);
     }
 
 //    private void registerCapabilities(RegisterCapabilitiesEvent event) {
