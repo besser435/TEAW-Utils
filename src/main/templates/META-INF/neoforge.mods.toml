@@ -88,12 +88,19 @@ config="${mod_id}.mixins.json"
     ordering="NONE"
     side="BOTH"
 
-# Create mod depend
+# Create
 [[dependencies.${mod_id}]]
     modId="create"
     type="required"
     versionRange="[6.0.9,6.1.0)"    # Be strict with versions given we use mixins
     ordering="NONE"
+    side="BOTH"
+# Sable
+[[dependencies.${mod_id}]]
+    modId="sable"
+    type="optional"
+    versionRange="[2.0.6,)"
+    ordering="AFTER"
     side="BOTH"
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

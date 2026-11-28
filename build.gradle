@@ -157,6 +157,7 @@ dependencies {
         implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 
         implementation "maven.modrinth:gF3BGWvG:yWmXD7GW"   // OPAC neoforge-1.21.1-0.33.0
+        implementation "maven.modrinth:T9PomCSv:fg9dTRz9"   // Sable NeoForge 2.0.6 for mc1.21.1
     }
 }
 

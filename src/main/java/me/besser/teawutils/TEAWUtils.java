@@ -5,11 +5,13 @@ import me.besser.teawutils.contraptionTweaks.ContraptionLimiter;
 import me.besser.teawutils.opac.PartyClaimListener;
 import me.besser.teawutils.registry.TUCreativeTabs;
 import me.besser.teawutils.registry.TUItems;
+import me.besser.teawutils.sable.SubLevelVelocityLimiter;
 import me.besser.teawutils.tweaks.MiscTweaks;
 import me.besser.teawutils.util.TEAWUtilsConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -48,6 +50,7 @@ public class TEAWUtils {
                 ContraptionLimiter.reloadConfig();
                 MiscTweaks.reloadConfig();
                 PartyClaimListener.reloadConfig();
+                SubLevelVelocityLimiter.reloadConfig();
             }
         });
 
@@ -57,12 +60,17 @@ public class TEAWUtils {
                 ContraptionLimiter.reloadConfig();
                 MiscTweaks.reloadConfig();
                 PartyClaimListener.reloadConfig();
+                SubLevelVelocityLimiter.reloadConfig();
             }
         });
 
 
         // Gameplay tweaks listeners
         NeoForge.EVENT_BUS.register(MiscTweaks.class);
+
+        if (ModList.get().isLoaded("sable")) {
+            SubLevelVelocityLimiter.register();
+        }
 
 
         LOGGER.info("TEAW Utils v{} started!", VERSION);
@@ -80,6 +88,7 @@ public class TEAWUtils {
 
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event) {
+        // If not loaded for some reason, this will crash the server, which is good to know there is a problem.
         OpenPACServerAPI.get(event.getServer())
                 .getServerClaimsManager()
                 .getActionListenerManager()

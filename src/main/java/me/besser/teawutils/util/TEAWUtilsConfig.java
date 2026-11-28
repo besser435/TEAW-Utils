@@ -29,6 +29,9 @@ public class TEAWUtilsConfig {
         public final ModConfigSpec.ConfigValue<List<? extends String>> disabledPotions;
         public final ModConfigSpec.BooleanValue requirePartyToClaim;
 
+        // Sable Limits
+        public final ModConfigSpec.DoubleValue subLevelMaxVelocity;
+
         // Build config
         public Common(ModConfigSpec.Builder builder) {
             builder.comment("Contraption limits").push("contraption_limits");
@@ -63,6 +66,12 @@ public class TEAWUtilsConfig {
             requirePartyToClaim = builder
                     .comment("Whether or not to require a party in order to be able to claim for Open Parties and Claims.")
                     .define("requirePartyToClaim", true);
+
+            subLevelMaxVelocity = builder
+                    .comment("Max linear velocity in meters per second for every Sable sub-level.")
+                    .comment("Values below 50 might not be completely enforced.")
+                    .comment("Set to 0 to disable")
+                    .defineInRange("subLevelMaxVelocity", 150.0, 0.0, Double.MAX_VALUE - 1);
 
             builder.pop();
         }
